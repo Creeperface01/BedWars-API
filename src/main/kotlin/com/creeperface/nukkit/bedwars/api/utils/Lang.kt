@@ -2,6 +2,7 @@ package com.creeperface.nukkit.bedwars.api.utils
 
 import cn.nukkit.utils.Config
 import cn.nukkit.utils.TextFormat
+import com.creeperface.nukkit.bedwars.api.BedWarsAPI
 
 enum class Lang(
     private val prefix: String? = null,
@@ -87,7 +88,7 @@ enum class Lang(
     fun translatePrefix(vararg args: Any) = translate0(true, *args)
 
     private fun translate0(prefix: Boolean, vararg args: Any): String {
-        if (args.isEmpty()) return (if (prefix) BedWars.chatPrefix else "") + this.translation
+        if (args.isEmpty()) return (if (prefix) BedWarsAPI.chatPrefix else "") + this.translation
 
         val base = StringBuilder(this.translation)
 
@@ -96,7 +97,7 @@ enum class Lang(
         }
 
         if (prefix) {
-            base.insert(0, BedWars.chatPrefix)
+            base.insert(0, BedWarsAPI.chatPrefix)
         }
 
         return base.toString()
@@ -114,6 +115,7 @@ enum class Lang(
 
     companion object {
 
+        @JvmSynthetic
         fun init(data: Config) {
             for (value in values()) {
                 var key = (value.prefix?.let { "$it." } ?: "") + if (value.full) "" else value.name.toLowerCase()
@@ -125,7 +127,7 @@ enum class Lang(
                 val cfgValue = data.get(key)
 
                 if (cfgValue == null) {
-                    logError("Unknown language translation $key")
+                    BedWarsAPI.logError("Unknown language translation $key")
                     continue
                 }
 

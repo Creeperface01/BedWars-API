@@ -31,5 +31,14 @@ interface BedWarsAPI {
 
         lateinit var instance: BedWarsAPI
             private set
+
+        @JvmSynthetic
+        internal lateinit var chatPrefix: String
+
+        @JvmSynthetic
+        internal lateinit var logInfo: (String) -> Unit
+
+        @JvmSynthetic
+        internal lateinit var logError: (String) -> Unit
     }
 }
