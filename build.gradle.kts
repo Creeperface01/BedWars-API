@@ -1,12 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val kotlinVersion = "1.4.21"
-val kotlinCoroutinesVersion = "1.4.2"
-val jacksonVersion = "2.10.1"
-val placeholderApiVersion = "1.4-SNAPSHOT"
-
 plugins {
-    kotlin("jvm") version "1.4.21"
+    kotlin("jvm")
     `maven-publish`
 }
 
@@ -60,11 +55,11 @@ afterEvaluate {
 }
 
 dependencies {
-    compileOnly(kotlin("stdlib-jdk8", kotlinVersion))
-    compileOnly(kotlin("reflect", kotlinVersion))
-    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
+    compileOnly(kotlin("stdlib-jdk8", Kotlin.version))
+    compileOnly(kotlin("reflect", Kotlin.version))
+    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Kotlin.coroutinesVersion}")
     compileOnly("cn.nukkit:nukkit:1.0-SNAPSHOT")
-    compileOnly("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
+    compileOnly("com.fasterxml.jackson.core:jackson-annotations:${Jackson.version}")
     compileOnly("com.creeperface.nukkit.kformapi:KFormAPI:1.0-SNAPSHOT")
-    compileOnly("com.creeperface.nukkit.placeholderapi:PlaceholderAPI:$placeholderApiVersion")
+    compileOnly("com.creeperface.nukkit.placeholderapi:PlaceholderAPI:${PlaceholderAPI.version}")
 }
