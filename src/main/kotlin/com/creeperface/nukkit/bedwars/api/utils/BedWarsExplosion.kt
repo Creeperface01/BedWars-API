@@ -12,7 +12,7 @@ import cn.nukkit.level.particle.HugeExplodeParticle
 import cn.nukkit.math.NukkitMath
 import cn.nukkit.math.SimpleAxisAlignedBB
 import cn.nukkit.math.Vector3
-import com.creeperface.nukkit.bedwars.api.arena.Arena
+import com.creeperface.nukkit.bedwars.api.arena.handler.GameHandler
 import kotlin.math.max
 
 /**
@@ -23,7 +23,7 @@ class BedWarsExplosion(private val source: Position, size: Double, private val w
     private val level: Level = source.getLevel()
     private val size: Double = max(size, 0.0)
 
-    fun explode(arena: Arena, team: Int): Boolean {
+    fun explode(arena: GameHandler, team: Int): Boolean {
         val source = Vector3(this.source.x, this.source.y, this.source.z).floor()
 
         val explosionSize = this.size * 2.0

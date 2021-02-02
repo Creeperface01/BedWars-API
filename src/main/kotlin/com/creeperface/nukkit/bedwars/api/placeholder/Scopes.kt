@@ -6,6 +6,10 @@ import com.creeperface.nukkit.placeholderapi.api.scope.Scope
 
 object ArenaScope : Scope<Arena, ArenaScope>()
 
+//object ArenaGameScope : Scope<GameHandler, ArenaGameScope>()
+//
+//object ArenaLobbyScope : Scope<LobbyHandler, ArenaLobbyScope>()
+
 object TeamScope : Scope<Team, TeamScope>() {
 
     override val parent = ArenaScope

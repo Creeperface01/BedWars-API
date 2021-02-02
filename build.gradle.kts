@@ -11,7 +11,12 @@ version = "1.0-SNAPSHOT"
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions.apply {
     jvmTarget = "1.8"
-    freeCompilerArgs = listOf("-Xmulti-platform")
+    freeCompilerArgs = listOf(
+        "-Xmulti-platform",
+        "-Xjvm-default=enable",
+        "-Xopt-in=kotlin.RequiresOptIn",
+        "-Xopt-in=kotlin.contracts.ExperimentalContracts"
+    )
 }
 
 repositories {
