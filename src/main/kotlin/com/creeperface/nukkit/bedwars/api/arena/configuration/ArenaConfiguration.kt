@@ -1,5 +1,6 @@
 package com.creeperface.nukkit.bedwars.api.arena.configuration
 
+import cn.nukkit.item.Item
 import cn.nukkit.math.Vector3
 import com.creeperface.nukkit.bedwars.api.utils.InventoryItem
 import com.creeperface.nukkit.bedwars.api.utils.watch
@@ -28,6 +29,7 @@ class ArenaConfiguration(
     override val teamSelectCommand: Boolean,
     override val teamSelectItem: InventoryItem? = null,
     @JsonProperty("voting") override val voteConfig: VoteConfig,
+    @JsonProperty("lucky_block") override val luckyBlockItems: List<Item>,
     override val lobbyItem: InventoryItem?,
     override val mapFilter: MapFilter
 ) : IArenaConfiguration, MutableConfiguration by conf
@@ -51,6 +53,7 @@ interface IArenaConfiguration : MutableConfiguration {
     val teamSelectCommand: Boolean
     val teamSelectItem: InventoryItem?
     val voteConfig: VoteConfig
+    val luckyBlockItems: List<Item>
     val lobbyItem: InventoryItem?
     val mapFilter: MapFilter
 }
