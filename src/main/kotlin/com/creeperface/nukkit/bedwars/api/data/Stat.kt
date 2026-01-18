@@ -8,9 +8,10 @@ enum class Stat {
     BEDS,
     PLACE,
     BREAK,
+    HITS,
     GAMES;
 
-    private val statName: String = name.toLowerCase()
+    private val statName: String = name.lowercase()
 
     fun getName() = statName
 }

@@ -1,13 +1,15 @@
 package com.creeperface.nukkit.bedwars.api.arena
 
-import cn.nukkit.Player
-import com.creeperface.nukkit.bedwars.api.arena.configuration.IArenaConfiguration
+import com.creeperface.nukkit.bedwars.api.arena.configuration.ArenaConfiguration
 import com.creeperface.nukkit.bedwars.api.utils.ArenaContext
-import com.creeperface.nukkit.bedwars.api.utils.Lang
+import com.hypixel.hytale.server.core.Message
+import com.hypixel.hytale.server.core.universe.PlayerRef
 
-interface Arena : IArenaConfiguration {
+interface Arena {
 
-    val players: Map<String, Player>
+    val config: ArenaConfiguration
+
+    val players: Map<String, PlayerRef>
 
     val state: State<*>
 
@@ -15,19 +17,12 @@ interface Arena : IArenaConfiguration {
 
     val closed: Boolean
 
-    fun getHandler(): Arena
+    fun joinToArena(p: PlayerRef): Boolean
 
-    fun joinToArena(p: Player): Boolean
+    fun leaveArena(p: PlayerRef)
 
-    fun leaveArena(p: Player)
+    fun inArena(p: PlayerRef): Boolean
 
-    fun inArena(p: Player): Boolean
-
-    fun messageAllPlayers(lang: Lang, vararg args: String)
-
-    /**
-     * Messages all players in this [Arena]
-     * This method includes spectators
-     */
-    fun messageAllPlayers(lang: Lang, addPrefix: Boolean = false, vararg args: String)
+    /** Broadcast a message to all players in this arena (including spectators). */
+    fun broadcastMessage(message: Message)
 }

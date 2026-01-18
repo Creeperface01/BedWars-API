@@ -1,10 +1,11 @@
 package com.creeperface.nukkit.bedwars.api
 
-import cn.nukkit.Player
 import com.creeperface.nukkit.bedwars.api.arena.Arena
 import com.creeperface.nukkit.bedwars.api.data.provider.DataProvider
 import com.creeperface.nukkit.bedwars.api.economy.EconomyProvider
-import com.creeperface.nukkit.bedwars.api.shop.Shop
+import com.creeperface.nukkit.bedwars.api.shop.ShopExtension
+import com.creeperface.nukkit.bedwars.api.special.SpecialItemRegistry
+import com.hypixel.hytale.server.core.universe.PlayerRef
 import kotlin.reflect.KClass
 
 interface BedWarsAPI {
@@ -13,15 +14,26 @@ interface BedWarsAPI {
 
     val dataProvider: DataProvider
 
-    val shop: Shop
+    /** Registry for custom special items (fireballs, bridge eggs, etc.). */
+    val specialItems: SpecialItemRegistry
 
-    fun getPlayerArena(p: Player): Arena?
+    /** API for dynamically extending the shop from other plugins. */
+    val shopExtension: ShopExtension
 
+    /** Get all active arenas. */
+    fun getArenas(): Collection<Arena>
+
+    /** Get arena by name. */
     fun getArena(arena: String): Arena?
 
-    fun joinRandomArena(p: Player)
+    /** Get the arena a player is currently in. */
+    fun getPlayerArena(p: PlayerRef): Arena?
 
-    fun getFreeArena(p: Player): Arena?
+    /** Join the best available arena. */
+    fun joinRandomArena(p: PlayerRef)
+
+    /** Find a free arena for the player. */
+    fun getFreeArena(p: PlayerRef): Arena?
 
     fun registerEconomyProvider(name: String, provider: KClass<out EconomyProvider>)
 
@@ -29,16 +41,14 @@ interface BedWarsAPI {
 
     companion object {
 
-        lateinit var instance: BedWarsAPI
-            private set
+        private var _instance: BedWarsAPI? = null
 
-        @JvmSynthetic
-        internal lateinit var chatPrefix: String
+        val instance: BedWarsAPI
+            get() = _instance ?: throw IllegalStateException("BedWars API not initialized")
 
-        @JvmSynthetic
-        internal lateinit var logInfo: (String) -> Unit
-
-        @JvmSynthetic
-        internal lateinit var logError: (String) -> Unit
+        /** Set by the core plugin during setup. Not intended for external use. */
+        fun setInstance(api: BedWarsAPI) {
+            _instance = api
+        }
     }
 }

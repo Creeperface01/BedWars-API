@@ -5,7 +5,7 @@ import com.creeperface.nukkit.bedwars.api.utils.set
 
 class Stats(private val statsOriginal: Array<Int>) {
 
-    private val stats = Array(Stat.values().size) { 0 }
+    private val stats = Array(Stat.entries.size) { 0 }
 
     fun getDelta(stat: Stat): Int {
         return stats[stat]
@@ -21,6 +21,6 @@ class Stats(private val statsOriginal: Array<Int>) {
 
     companion object {
 
-        fun initial() = Stats(Array(Stat.values().size) { 0 })
+        fun initial() = Stats(Array(Stat.entries.size) { 0 })
     }
 }

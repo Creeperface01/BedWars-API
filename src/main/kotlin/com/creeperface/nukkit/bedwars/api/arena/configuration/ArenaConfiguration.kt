@@ -1,88 +1,92 @@
 package com.creeperface.nukkit.bedwars.api.arena.configuration
 
-import cn.nukkit.item.Item
-import cn.nukkit.math.Vector3
-import com.creeperface.nukkit.bedwars.api.utils.InventoryItem
-import com.creeperface.nukkit.bedwars.api.utils.watch
-import com.fasterxml.jackson.annotation.JacksonInject
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.hypixel.hytale.protocol.Vector3d
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
-class ArenaConfiguration(
-    @JacksonInject conf: MutableConfiguration,
+/**
+ * Per-arena configuration. Serializable — loaded directly from JSON files.
+ */
+@Serializable
+data class ArenaConfiguration(
+    val name: String = "",
+    @SerialName("time_limit") val timeLimit: Int = 3600,
+    @SerialName("start_time") val startTime: Int = 60,
+    @SerialName("ending_time") val endingTime: Int = 60,
+    @SerialName("start_players") val startPlayers: Int = 8,
+    @SerialName("max_players") val maxPlayers: Int = 16,
+    @SerialName("team_players") val teamPlayers: Int = 4,
+    @SerialName("fast_start") val fastStart: Boolean = true,
+    @SerialName("fast_start_time") val fastStartTime: Int = 10,
+    @SerialName("fast_start_players") val fastStartPlayers: Int = 14,
+    @SerialName("lobby_position") val lobbyPosition: Vec3 = Vec3(),
+    @SerialName("lobby_world") val lobbyWorld: String = "",
+    val voting: VotingConfig = VotingConfig(),
+    @SerialName("map_filter") val mapFilter: MapFilterConfig = MapFilterConfig(),
+    @SerialName("lobby_items") val lobbyItems: LobbyItemsConfiguration = LobbyItemsConfiguration()
+)
 
-    override val name: String,
-    override val lobby: Vector3? = null,
+/**
+ * Per-map configuration. Serializable — loaded directly from JSON files.
+ */
+@Serializable
+data class MapConfiguration(
+    val name: String = "",
+    val teams: List<TeamConfiguration> = emptyList(),
+    val resources: List<ResourceConfiguration> = emptyList()
+)
 
-    override val timeLimit: Int,
-    override val startTime: Int,
-    override val endingTime: Int,
-    override val startPlayers: Int,
-    override val bronzeDropInterval: Int,
-    override val ironDropInterval: Int,
-    override val goldDropInterval: Int,
-    override val fastStart: Boolean,
-    override val fastStartTime: Int,
-    override val fastStartPlayers: Int,
-    override val teamPlayers: Int,
-    override val maxPlayers: Int,
-    override val multiPlatform: Boolean,
-    override val teamSelectCommand: Boolean,
-    override val teamSelectItem: InventoryItem? = null,
-    @JsonProperty("voting") override val voteConfig: VoteConfig,
-    @JsonProperty("lucky_block") override val luckyBlockItems: List<Item>,
-    override val lobbyItem: InventoryItem?,
-    override val mapFilter: MapFilter
-) : IArenaConfiguration, MutableConfiguration by conf
+@Serializable
+data class TeamConfiguration(
+    val name: String = "",
+    val color: String = "#ff0000",
+    val spawn: Vec3 = Vec3(),
+    val villager: Vec3 = Vec3(),
+    val bed: Vec3 = Vec3()
+)
 
-interface IArenaConfiguration : MutableConfiguration {
-    val name: String
-    val timeLimit: Int
-    val startTime: Int
-    val endingTime: Int
-    val startPlayers: Int
-    val bronzeDropInterval: Int
-    val ironDropInterval: Int
-    val goldDropInterval: Int
-    val fastStart: Boolean
-    val fastStartTime: Int
-    val fastStartPlayers: Int
-    val teamPlayers: Int
-    val maxPlayers: Int
-    val multiPlatform: Boolean
-    val lobby: Vector3?
-    val teamSelectCommand: Boolean
-    val teamSelectItem: InventoryItem?
-    val voteConfig: VoteConfig
-    val luckyBlockItems: List<Item>
-    val lobbyItem: InventoryItem?
-    val mapFilter: MapFilter
-}
+@Serializable
+data class ResourceConfiguration(
+    val name: String = "",
+    @SerialName("item_id") val itemId: String = "",
+    @SerialName("drop_frequency") val dropFrequency: Int = 30,
+    val positions: List<Vec3> = emptyList()
+)
 
-class VoteConfig(
-    @JacksonInject parent: MutableConfiguration,
-    enable: Boolean,
-    maxOptions: Int,
-    players: Int,
-    countdown: Int,
-    item: InventoryItem?
+@Serializable
+data class VotingConfig(
+    val enable: Boolean = true,
+    @SerialName("max_options") val maxOptions: Int = 3,
+    val players: Int = 4,
+    val countdown: Int = 20
+)
+
+@Serializable
+data class MapFilterConfig(
+    val enable: Boolean = false,
+    @SerialName("team_count") val teamCount: Set<Int> = emptySet(),
+    val include: List<String> = emptyList(),
+    val exclude: List<String> = emptyList()
+)
+
+@Serializable
+data class LobbyItemsConfiguration(
+    @SerialName("vote_item") val voteItem: String = "Deco_Map",
+    @SerialName("team_select_item") val teamSelectItem: String = "Cloth_Roof_Green_Flap",
+    @SerialName("leave_item") val leaveItem: String = "Plant_Coral_Block_Red",
+    @SerialName("vote_slot") val voteSlot: Int = 0,
+    @SerialName("team_select_slot") val teamSelectSlot: Int = 1,
+    @SerialName("leave_slot") val leaveSlot: Int = 8
+)
+
+@Serializable
+data class Vec3(
+    val x: Double = 0.0,
+    val y: Double = 64.0,
+    val z: Double = 0.0
 ) {
-
-    val enable: Boolean by watch(parent, enable)
-    val maxOptions: Int by watch(parent, maxOptions)
-    val players: Int by watch(parent, players)
-    val countdown: Int by watch(parent, countdown)
-    val item: InventoryItem? by watch(parent, item)
-}
-
-class MapFilter(
-    @JacksonInject parent: MutableConfiguration,
-    enable: Boolean,
-    teamCount: Set<Int> = emptySet(),
-    include: List<String> = emptyList(),
-    exclude: List<String> = emptyList()
-) {
-    val enable: Boolean by watch(parent, enable)
-    val teamCount: Set<Int> by watch(parent, teamCount)
-    val include: List<String> by watch(parent, include)
-    val exclude: List<String> by watch(parent, exclude)
+    @Transient
+    val vector3d: Vector3d
+        get() = Vector3d(x, y, z)
 }

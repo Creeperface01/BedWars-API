@@ -1,17 +1,15 @@
 package com.creeperface.nukkit.bedwars.api.event
 
 import com.creeperface.nukkit.bedwars.api.arena.Arena
-import com.creeperface.nukkit.bedwars.api.arena.PlayerData
-import com.creeperface.nukkit.bedwars.api.arena.Team
 import com.hypixel.hytale.event.ICancellable
+import com.hypixel.hytale.server.core.universe.PlayerRef
 
 /**
- * Fired when a bed is about to be destroyed. Cancellable.
+ * Fired when a player is about to join an arena. Cancellable.
  */
-class ArenaBedDestroyEvent(
+class ArenaPlayerJoinEvent(
     arena: Arena,
-    val playerData: PlayerData,
-    val team: Team
+    val playerRef: PlayerRef
 ) : ArenaEvent(arena), ICancellable {
 
     private var cancelled: Boolean = false

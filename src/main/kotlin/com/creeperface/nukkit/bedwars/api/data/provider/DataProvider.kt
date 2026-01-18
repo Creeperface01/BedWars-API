@@ -1,18 +1,12 @@
 package com.creeperface.nukkit.bedwars.api.data.provider
 
-import com.creeperface.nukkit.bedwars.api.arena.configuration.ArenaConfiguration
-import com.creeperface.nukkit.bedwars.api.arena.configuration.MapConfiguration
 import com.creeperface.nukkit.bedwars.api.data.Stats
 
 interface DataProvider {
 
-    fun init() {
+    fun init() {}
 
-    }
-
-    fun deinit() {
-
-    }
+    fun deinit() {}
 
     suspend fun register(name: String, identifier: String)
 
@@ -23,8 +17,4 @@ interface DataProvider {
     suspend fun getDataByName(name: String): Stats?
 
     suspend fun saveData(identifier: String, data: Stats)
-
-    suspend fun syncArenas(arenas: MutableMap<String, ArenaConfiguration>)
-
-    suspend fun syncMaps(maps: MutableMap<String, MapConfiguration>)
 }
