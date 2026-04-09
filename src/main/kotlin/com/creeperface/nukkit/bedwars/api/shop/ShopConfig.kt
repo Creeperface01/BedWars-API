@@ -2,13 +2,15 @@ package com.creeperface.nukkit.bedwars.api.shop
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 /**
  * Shop structure loaded from shop.json.
  */
 @Serializable
 data class ShopConfig(
-    val windows: List<ShopWindowConfig> = emptyList()
+    val windows: List<ShopWindowConfig> = emptyList(),
+    val extensions: JsonObject = JsonObject(emptyMap())
 )
 
 @Serializable

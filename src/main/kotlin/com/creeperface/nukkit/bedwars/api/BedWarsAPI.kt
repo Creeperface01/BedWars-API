@@ -3,8 +3,7 @@ package com.creeperface.nukkit.bedwars.api
 import com.creeperface.nukkit.bedwars.api.arena.Arena
 import com.creeperface.nukkit.bedwars.api.data.provider.DataProvider
 import com.creeperface.nukkit.bedwars.api.economy.EconomyProvider
-import com.creeperface.nukkit.bedwars.api.shop.ShopExtension
-import com.creeperface.nukkit.bedwars.api.special.SpecialItemRegistry
+import com.creeperface.nukkit.bedwars.api.extension.ConfigExtensionRegistry
 import com.hypixel.hytale.server.core.universe.PlayerRef
 import kotlin.reflect.KClass
 
@@ -14,11 +13,8 @@ interface BedWarsAPI {
 
     val dataProvider: DataProvider
 
-    /** Registry for custom special items (fireballs, bridge eggs, etc.). */
-    val specialItems: SpecialItemRegistry
-
-    /** API for dynamically extending the shop from other plugins. */
-    val shopExtension: ShopExtension
+    /** Registry for config extension sections and UI extension points. */
+    val configExtensions: ConfigExtensionRegistry
 
     /** Get all active arenas. */
     fun getArenas(): Collection<Arena>

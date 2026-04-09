@@ -4,6 +4,7 @@ import com.hypixel.hytale.protocol.Vector3d
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlinx.serialization.json.JsonObject
 
 /**
  * Per-arena configuration. Serializable — loaded directly from JSON files.
@@ -22,9 +23,11 @@ data class ArenaConfiguration(
     @SerialName("fast_start_players") val fastStartPlayers: Int = 14,
     @SerialName("lobby_position") val lobbyPosition: Vec3 = Vec3(),
     @SerialName("lobby_world") val lobbyWorld: String = "",
+    val shop: String = "",
     val voting: VotingConfig = VotingConfig(),
     @SerialName("map_filter") val mapFilter: MapFilterConfig = MapFilterConfig(),
-    @SerialName("lobby_items") val lobbyItems: LobbyItemsConfiguration = LobbyItemsConfiguration()
+    @SerialName("lobby_items") val lobbyItems: LobbyItemsConfiguration = LobbyItemsConfiguration(),
+    val extensions: JsonObject = JsonObject(emptyMap())
 )
 
 /**
@@ -34,7 +37,8 @@ data class ArenaConfiguration(
 data class MapConfiguration(
     val name: String = "",
     val teams: List<TeamConfiguration> = emptyList(),
-    val resources: List<ResourceConfiguration> = emptyList()
+    val resources: List<ResourceConfiguration> = emptyList(),
+    val extensions: JsonObject = JsonObject(emptyMap())
 )
 
 @Serializable
