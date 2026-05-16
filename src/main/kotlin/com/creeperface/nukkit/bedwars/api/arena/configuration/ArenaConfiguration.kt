@@ -21,6 +21,7 @@ data class ArenaConfiguration(
     @SerialName("fast_start") val fastStart: Boolean = true,
     @SerialName("fast_start_time") val fastStartTime: Int = 10,
     @SerialName("fast_start_players") val fastStartPlayers: Int = 14,
+    @SerialName("respawn_delay") val respawnDelay: Int = 5,
     @SerialName("lobby_position") val lobbyPosition: Vec3 = Vec3(),
     @SerialName("lobby_world") val lobbyWorld: String = "",
     val shop: String = "",
@@ -62,7 +63,6 @@ data class ResourceConfiguration(
 data class VotingConfig(
     val enable: Boolean = true,
     @SerialName("max_options") val maxOptions: Int = 3,
-    val players: Int = 4,
     val countdown: Int = 20
 )
 
