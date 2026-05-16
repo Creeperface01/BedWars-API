@@ -8,18 +8,27 @@ interface EconomyProvider {
 
     val defaultCurrency: Currency
 
-    fun subtractMoney(playerRef: PlayerRef, amount: Double, currency: Currency = defaultCurrency) =
-        addMoney(playerRef.uuid, -amount, currency)
+    fun subtractMoney(
+        playerRef: PlayerRef,
+        amount: Double,
+        currency: Currency = defaultCurrency
+    ): CompletableFuture<Void> = addMoney(playerRef.uuid, -amount, currency)
 
-    fun subtractMoney(player: UUID, amount: Double, currency: Currency = defaultCurrency) =
-        addMoney(player, -amount, currency)
+    fun subtractMoney(
+        player: UUID,
+        amount: Double,
+        currency: Currency = defaultCurrency
+    ): CompletableFuture<Void> = addMoney(player, -amount, currency)
 
-    fun addMoney(playerRef: PlayerRef, amount: Double, currency: Currency = defaultCurrency) =
-        addMoney(playerRef.uuid, amount, currency)
+    fun addMoney(
+        playerRef: PlayerRef,
+        amount: Double,
+        currency: Currency = defaultCurrency
+    ): CompletableFuture<Void> = addMoney(playerRef.uuid, amount, currency)
 
-    fun addMoney(player: UUID, amount: Double, currency: Currency = defaultCurrency)
+    fun addMoney(player: UUID, amount: Double, currency: Currency = defaultCurrency): CompletableFuture<Void>
 
-    fun getMoney(playerRef: PlayerRef, currency: Currency = defaultCurrency) =
+    fun getMoney(playerRef: PlayerRef, currency: Currency = defaultCurrency): CompletableFuture<Double> =
         getMoney(playerRef.username, currency)
 
     fun getMoney(player: String, currency: Currency = defaultCurrency): CompletableFuture<Double>

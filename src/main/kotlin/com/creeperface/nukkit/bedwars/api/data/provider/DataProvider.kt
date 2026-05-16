@@ -4,6 +4,7 @@ import com.creeperface.nukkit.bedwars.api.arena.configuration.ArenaConfiguration
 import com.creeperface.nukkit.bedwars.api.arena.configuration.MapConfiguration
 import com.creeperface.nukkit.bedwars.api.data.Stats
 import com.creeperface.nukkit.bedwars.api.shop.ShopConfig
+import java.util.concurrent.CompletableFuture
 
 interface DataProvider {
 
@@ -13,35 +14,35 @@ interface DataProvider {
 
     // ---- Player stats ----
 
-    suspend fun register(name: String, identifier: String)
+    fun register(name: String, identifier: String): CompletableFuture<Void>
 
-    suspend fun unregister(identifier: String)
+    fun unregister(identifier: String): CompletableFuture<Void>
 
-    suspend fun getData(identifier: String): Stats?
+    fun getData(identifier: String): CompletableFuture<Stats?>
 
-    suspend fun getDataByName(name: String): Stats?
+    fun getDataByName(name: String): CompletableFuture<Stats?>
 
-    suspend fun saveData(identifier: String, data: Stats)
+    fun saveData(identifier: String, data: Stats): CompletableFuture<Void>
 
     // ---- Arena/map config storage ----
 
-    suspend fun loadArenaConfigs(): Map<String, ArenaConfiguration> = emptyMap()
+    fun loadArenaConfigs(): CompletableFuture<Map<String, ArenaConfiguration>>
 
-    suspend fun saveArenaConfig(name: String, config: ArenaConfiguration) {}
+    fun saveArenaConfig(name: String, config: ArenaConfiguration): CompletableFuture<Void>
 
-    suspend fun deleteArenaConfig(name: String) {}
+    fun deleteArenaConfig(name: String): CompletableFuture<Void>
 
-    suspend fun loadMapConfigs(): Map<String, MapConfiguration> = emptyMap()
+    fun loadMapConfigs(): CompletableFuture<Map<String, MapConfiguration>>
 
-    suspend fun saveMapConfig(name: String, config: MapConfiguration) {}
+    fun saveMapConfig(name: String, config: MapConfiguration): CompletableFuture<Void>
 
-    suspend fun deleteMapConfig(name: String) {}
+    fun deleteMapConfig(name: String): CompletableFuture<Void>
 
     // ---- Shop config storage ----
 
-    suspend fun loadShopConfigs(): Map<String, ShopConfig> = emptyMap()
+    fun loadShopConfigs(): CompletableFuture<Map<String, ShopConfig>>
 
-    suspend fun saveShopConfig(name: String, config: ShopConfig) {}
+    fun saveShopConfig(name: String, config: ShopConfig): CompletableFuture<Void>
 
-    suspend fun deleteShopConfig(name: String) {}
+    fun deleteShopConfig(name: String): CompletableFuture<Void>
 }
