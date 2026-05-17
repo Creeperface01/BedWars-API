@@ -7,7 +7,8 @@ group = "cz.creeperface.hytale.bedwars"
 version = "1.0"
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    // kotlinx-serialization-json is provided by the Hytale runtime; never bundled.
+    compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
     compileOnly(kotlin("reflect", Kotlin.version))
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Kotlin.coroutinesVersion}")
