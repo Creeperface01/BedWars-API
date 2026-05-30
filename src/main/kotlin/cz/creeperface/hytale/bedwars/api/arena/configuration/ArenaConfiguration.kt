@@ -1,10 +1,9 @@
 package cz.creeperface.hytale.bedwars.api.arena.configuration
 
-import com.hypixel.hytale.protocol.Vector3d
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JsonObject
+import org.joml.Vector3d
 
 /**
  * Per-arena configuration. Serializable — loaded directly from JSON files.
@@ -90,7 +89,6 @@ data class Vec3(
     val y: Double = 64.0,
     val z: Double = 0.0
 ) {
-    @Transient
     val vector3d: Vector3d
         get() = Vector3d(x, y, z)
 }
