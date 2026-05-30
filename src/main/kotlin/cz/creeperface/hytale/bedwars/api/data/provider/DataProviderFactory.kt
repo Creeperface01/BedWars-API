@@ -8,5 +8,5 @@ package cz.creeperface.hytale.bedwars.api.data.provider
  * Implementations are responsible for loading their own configuration.
  */
 fun interface DataProviderFactory {
-    fun create(): cz.creeperface.hytale.bedwars.api.data.provider.DataProvider
+    fun create(): DataProvider
 }

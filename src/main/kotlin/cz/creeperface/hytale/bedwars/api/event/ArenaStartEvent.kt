@@ -1,7 +1,9 @@
 package cz.creeperface.hytale.bedwars.api.event
 
+import cz.creeperface.hytale.bedwars.api.arena.Arena
+
 /**
  * Fired when an arena transitions to GAME state (game begins).
  */
-class ArenaStartEvent(arena: cz.creeperface.hytale.bedwars.api.arena.Arena) :
-    cz.creeperface.hytale.bedwars.api.event.ArenaEvent(arena)
+class ArenaStartEvent(arena: Arena) :
+    ArenaEvent(arena)

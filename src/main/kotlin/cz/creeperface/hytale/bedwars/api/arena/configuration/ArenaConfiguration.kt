@@ -22,12 +22,12 @@ data class ArenaConfiguration(
     @SerialName("fast_start_time") val fastStartTime: Int = 10,
     @SerialName("fast_start_players") val fastStartPlayers: Int = 14,
     @SerialName("respawn_delay") val respawnDelay: Int = 5,
-    @SerialName("lobby_position") val lobbyPosition: cz.creeperface.hytale.bedwars.api.arena.configuration.Vec3 = _root_ide_package_.cz.creeperface.hytale.bedwars.api.arena.configuration.Vec3(),
+    @SerialName("lobby_position") val lobbyPosition: Vec3 = Vec3(),
     @SerialName("lobby_world") val lobbyWorld: String = "",
     val shop: String = "",
-    val voting: cz.creeperface.hytale.bedwars.api.arena.configuration.VotingConfig = _root_ide_package_.cz.creeperface.hytale.bedwars.api.arena.configuration.VotingConfig(),
-    @SerialName("map_filter") val mapFilter: cz.creeperface.hytale.bedwars.api.arena.configuration.MapFilterConfig = _root_ide_package_.cz.creeperface.hytale.bedwars.api.arena.configuration.MapFilterConfig(),
-    @SerialName("lobby_items") val lobbyItems: cz.creeperface.hytale.bedwars.api.arena.configuration.LobbyItemsConfiguration = _root_ide_package_.cz.creeperface.hytale.bedwars.api.arena.configuration.LobbyItemsConfiguration(),
+    val voting: VotingConfig = VotingConfig(),
+    @SerialName("map_filter") val mapFilter: MapFilterConfig = MapFilterConfig(),
+    @SerialName("lobby_items") val lobbyItems: LobbyItemsConfiguration = LobbyItemsConfiguration(),
     val extensions: JsonObject = JsonObject(emptyMap())
 )
 
@@ -37,8 +37,8 @@ data class ArenaConfiguration(
 @Serializable
 data class MapConfiguration(
     val name: String = "",
-    val teams: List<cz.creeperface.hytale.bedwars.api.arena.configuration.TeamConfiguration> = emptyList(),
-    val resources: List<cz.creeperface.hytale.bedwars.api.arena.configuration.ResourceConfiguration> = emptyList(),
+    val teams: List<TeamConfiguration> = emptyList(),
+    val resources: List<ResourceConfiguration> = emptyList(),
     val extensions: JsonObject = JsonObject(emptyMap())
 )
 
@@ -46,9 +46,9 @@ data class MapConfiguration(
 data class TeamConfiguration(
     val name: String = "",
     val color: String = "#ff0000",
-    val spawn: cz.creeperface.hytale.bedwars.api.arena.configuration.Vec3 = _root_ide_package_.cz.creeperface.hytale.bedwars.api.arena.configuration.Vec3(),
-    val villager: cz.creeperface.hytale.bedwars.api.arena.configuration.Vec3 = _root_ide_package_.cz.creeperface.hytale.bedwars.api.arena.configuration.Vec3(),
-    val bed: cz.creeperface.hytale.bedwars.api.arena.configuration.Vec3 = _root_ide_package_.cz.creeperface.hytale.bedwars.api.arena.configuration.Vec3()
+    val spawn: Vec3 = Vec3(),
+    val villager: Vec3 = Vec3(),
+    val bed: Vec3 = Vec3()
 )
 
 @Serializable
@@ -56,7 +56,7 @@ data class ResourceConfiguration(
     val name: String = "",
     @SerialName("item_id") val itemId: String = "",
     @SerialName("drop_frequency") val dropFrequency: Int = 30,
-    val positions: List<cz.creeperface.hytale.bedwars.api.arena.configuration.Vec3> = emptyList()
+    val positions: List<Vec3> = emptyList()
 )
 
 @Serializable

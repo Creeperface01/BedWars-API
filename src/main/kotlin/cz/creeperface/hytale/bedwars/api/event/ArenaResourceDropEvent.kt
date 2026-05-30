@@ -1,18 +1,20 @@
 package cz.creeperface.hytale.bedwars.api.event
 
 import com.hypixel.hytale.event.ICancellable
+import cz.creeperface.hytale.bedwars.api.arena.Arena
+import cz.creeperface.hytale.bedwars.api.arena.configuration.Vec3
 
 /**
  * Fired when a resource is about to be dropped at a generator. Cancellable.
  * Cancel to prevent this specific resource drop.
  */
 class ArenaResourceDropEvent(
-    arena: cz.creeperface.hytale.bedwars.api.arena.Arena,
+    arena: Arena,
     val itemId: String,
-    val position: cz.creeperface.hytale.bedwars.api.arena.configuration.Vec3,
+    val position: Vec3,
     /** The generator name from configuration. */
     val generatorName: String
-) : cz.creeperface.hytale.bedwars.api.event.ArenaEvent(arena), ICancellable {
+) : ArenaEvent(arena), ICancellable {
 
     private var cancelled = false
 

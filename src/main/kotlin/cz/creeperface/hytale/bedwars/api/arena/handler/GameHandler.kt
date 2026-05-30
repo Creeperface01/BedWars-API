@@ -1,24 +1,27 @@
 package cz.creeperface.hytale.bedwars.api.arena.handler
 
 import com.hypixel.hytale.server.core.universe.PlayerRef
+import cz.creeperface.hytale.bedwars.api.arena.PlayerData
+import cz.creeperface.hytale.bedwars.api.arena.Team
+import cz.creeperface.hytale.bedwars.api.arena.configuration.MapConfiguration
 
 interface GameHandler {
 
-    val mapConfig: cz.creeperface.hytale.bedwars.api.arena.configuration.MapConfiguration
+    val mapConfig: MapConfiguration
 
-    val teams: List<cz.creeperface.hytale.bedwars.api.arena.Team>
+    val teams: List<Team>
 
-    val aliveTeams: List<cz.creeperface.hytale.bedwars.api.arena.Team>
+    val aliveTeams: List<Team>
 
     val ending: Boolean
 
-    val winner: cz.creeperface.hytale.bedwars.api.arena.Team?
+    val winner: Team?
 
-    fun getPlayerData(p: PlayerRef): cz.creeperface.hytale.bedwars.api.arena.PlayerData?
+    fun getPlayerData(p: PlayerRef): PlayerData?
 
-    fun getPlayerTeam(p: PlayerRef): cz.creeperface.hytale.bedwars.api.arena.Team?
+    fun getPlayerTeam(p: PlayerRef): Team?
 
-    fun getTeam(id: Int): cz.creeperface.hytale.bedwars.api.arena.Team?
+    fun getTeam(id: Int): Team?
 
     fun isSpectator(p: PlayerRef): Boolean
 

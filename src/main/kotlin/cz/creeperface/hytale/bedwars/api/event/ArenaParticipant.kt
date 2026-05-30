@@ -1,6 +1,7 @@
 package cz.creeperface.hytale.bedwars.api.event
 
 import com.hypixel.hytale.server.core.universe.PlayerRef
+import cz.creeperface.hytale.bedwars.api.arena.Team
 import java.util.*
 
 /**
@@ -12,7 +13,7 @@ import java.util.*
 sealed class ArenaParticipant {
 
     /** Team this participant is on at the time the event fires. */
-    abstract val team: cz.creeperface.hytale.bedwars.api.arena.Team
+    abstract val team: Team
 
     /** Human-readable name for chat / log output. */
     abstract val displayName: String
@@ -20,7 +21,7 @@ sealed class ArenaParticipant {
     /** A human player. */
     data class Player(
         val playerRef: PlayerRef,
-        override val team: cz.creeperface.hytale.bedwars.api.arena.Team
+        override val team: Team
     ) : ArenaParticipant() {
         override val displayName: String get() = playerRef.username
     }
@@ -29,7 +30,7 @@ sealed class ArenaParticipant {
     data class Bot(
         val uuid: UUID,
         val name: String,
-        override val team: cz.creeperface.hytale.bedwars.api.arena.Team
+        override val team: Team
     ) : ArenaParticipant() {
         override val displayName: String get() = name
     }

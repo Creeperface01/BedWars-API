@@ -9,5 +9,5 @@ package cz.creeperface.hytale.bedwars.api.economy
  * and may return a fallback provider if unavailable.
  */
 fun interface EconomyProviderFactory {
-    fun create(): cz.creeperface.hytale.bedwars.api.economy.EconomyProvider
+    fun create(): EconomyProvider
 }

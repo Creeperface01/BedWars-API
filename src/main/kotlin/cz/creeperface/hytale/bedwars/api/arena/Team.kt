@@ -1,6 +1,8 @@
 package cz.creeperface.hytale.bedwars.api.arena
 
 import com.hypixel.hytale.server.core.Message
+import cz.creeperface.hytale.bedwars.api.arena.configuration.TeamConfiguration
+import cz.creeperface.hytale.bedwars.api.utils.TeamContext
 
 /**
  * Represents a game team at runtime.
@@ -9,11 +11,11 @@ interface Team {
 
     val id: Int
 
-    val arena: cz.creeperface.hytale.bedwars.api.arena.Arena
+    val arena: Arena
 
-    val config: cz.creeperface.hytale.bedwars.api.arena.configuration.TeamConfiguration
+    val config: TeamConfiguration
 
-    val context: cz.creeperface.hytale.bedwars.api.utils.TeamContext
+    val context: TeamContext
 
     val playerCount: Int
 
@@ -28,5 +30,5 @@ interface Team {
 
     fun messagePlayers(message: Message)
 
-    fun getTeamPlayers(): Map<String, cz.creeperface.hytale.bedwars.api.arena.PlayerData>
+    fun getTeamPlayers(): Map<String, PlayerData>
 }

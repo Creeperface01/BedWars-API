@@ -26,31 +26,31 @@ object UiExtensionPoints {
 
     /** Main configurator page — add buttons alongside Arenas / Maps / Shops. */
     val MAIN_PAGE_BUTTONS =
-        _root_ide_package_.cz.creeperface.hytale.bedwars.api.extension.UiExtensionPoint<cz.creeperface.hytale.bedwars.api.extension.MainPageContext>(
+        UiExtensionPoint<MainPageContext>(
             "bedwars:main_page_buttons"
         )
 
     /** Arena setup page — inject sections before the Save/Discard buttons. */
     val ARENA_SETUP_SECTIONS =
-        _root_ide_package_.cz.creeperface.hytale.bedwars.api.extension.UiExtensionPoint<cz.creeperface.hytale.bedwars.api.extension.ArenaEditContext>(
+        UiExtensionPoint<ArenaEditContext>(
             "bedwars:arena_setup_sections"
         )
 
     /** Map setup page — add buttons alongside Teams / Resources. */
     val MAP_SETUP_BUTTONS =
-        _root_ide_package_.cz.creeperface.hytale.bedwars.api.extension.UiExtensionPoint<cz.creeperface.hytale.bedwars.api.extension.MapEditContext>(
+        UiExtensionPoint<MapEditContext>(
             "bedwars:map_setup_buttons"
         )
 
     /** Map setup page — inject sections before the Save/Discard buttons. */
     val MAP_SETUP_SECTIONS =
-        _root_ide_package_.cz.creeperface.hytale.bedwars.api.extension.UiExtensionPoint<cz.creeperface.hytale.bedwars.api.extension.MapEditContext>(
+        UiExtensionPoint<MapEditContext>(
             "bedwars:map_setup_sections"
         )
 
     /** Shop setup (category list) page — inject sections before Save/Discard. */
     val SHOP_SETUP_SECTIONS =
-        _root_ide_package_.cz.creeperface.hytale.bedwars.api.extension.UiExtensionPoint<cz.creeperface.hytale.bedwars.api.extension.ShopEditContext>(
+        UiExtensionPoint<ShopEditContext>(
             "bedwars:shop_setup_sections"
         )
 }

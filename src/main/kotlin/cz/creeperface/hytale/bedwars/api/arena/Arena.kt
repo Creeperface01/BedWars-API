@@ -2,16 +2,18 @@ package cz.creeperface.hytale.bedwars.api.arena
 
 import com.hypixel.hytale.server.core.Message
 import com.hypixel.hytale.server.core.universe.PlayerRef
+import cz.creeperface.hytale.bedwars.api.arena.configuration.ArenaConfiguration
+import cz.creeperface.hytale.bedwars.api.utils.ArenaContext
 
 interface Arena {
 
-    val config: cz.creeperface.hytale.bedwars.api.arena.configuration.ArenaConfiguration
+    val config: ArenaConfiguration
 
     val players: Map<String, PlayerRef>
 
-    val state: cz.creeperface.hytale.bedwars.api.arena.State<*>
+    val state: State<*>
 
-    val context: cz.creeperface.hytale.bedwars.api.utils.ArenaContext
+    val context: ArenaContext
 
     val closed: Boolean
 

@@ -1,5 +1,7 @@
 package cz.creeperface.hytale.bedwars.api.event
 
+import cz.creeperface.hytale.bedwars.api.arena.Arena
+
 /**
  * Fired when a participant kills another participant in an arena.
  *
@@ -11,7 +13,7 @@ package cz.creeperface.hytale.bedwars.api.event
  * can be attributed.
  */
 class ArenaKillEvent(
-    arena: cz.creeperface.hytale.bedwars.api.arena.Arena,
-    val victim: cz.creeperface.hytale.bedwars.api.event.ArenaParticipant,
-    val killer: cz.creeperface.hytale.bedwars.api.event.ArenaParticipant
-) : cz.creeperface.hytale.bedwars.api.event.ArenaEvent(arena)
+    arena: Arena,
+    val victim: ArenaParticipant,
+    val killer: ArenaParticipant
+) : ArenaEvent(arena)

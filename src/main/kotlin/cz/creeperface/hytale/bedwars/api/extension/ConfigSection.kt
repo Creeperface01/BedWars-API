@@ -84,7 +84,7 @@ class ConfigSection<T : Any>(
 /**
  * Convenience extension to read a [cz.creeperface.hytale.bedwars.api.extension.ConfigSection] from this JsonObject.
  */
-fun <T : Any> JsonObject.getSection(section: cz.creeperface.hytale.bedwars.api.extension.ConfigSection<T>): T =
+fun <T : Any> JsonObject.getSection(section: ConfigSection<T>): T =
     section.getFrom(this)
 
 /**
@@ -92,6 +92,6 @@ fun <T : Any> JsonObject.getSection(section: cz.creeperface.hytale.bedwars.api.e
  * Returns a new JsonObject with the section data.
  */
 fun <T : Any> JsonObject.withSection(
-    section: cz.creeperface.hytale.bedwars.api.extension.ConfigSection<T>,
+    section: ConfigSection<T>,
     value: T
 ): JsonObject = section.setIn(this, value)

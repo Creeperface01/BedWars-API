@@ -1,6 +1,8 @@
 package cz.creeperface.hytale.bedwars.api.arena.handler
 
 import com.hypixel.hytale.server.core.universe.PlayerRef
+import cz.creeperface.hytale.bedwars.api.arena.Team
+import cz.creeperface.hytale.bedwars.api.arena.configuration.MapConfiguration
 
 interface LobbyHandler {
 
@@ -8,14 +10,14 @@ interface LobbyHandler {
 
     interface TeamSelectHandler : LobbyHandler {
 
-        val teams: List<cz.creeperface.hytale.bedwars.api.arena.Team>
+        val teams: List<Team>
 
         val starting: Boolean
 
-        val mapConfig: cz.creeperface.hytale.bedwars.api.arena.configuration.MapConfiguration
+        val mapConfig: MapConfiguration
 
-        fun getPlayerTeam(p: PlayerRef): cz.creeperface.hytale.bedwars.api.arena.Team?
+        fun getPlayerTeam(p: PlayerRef): Team?
 
-        fun isTeamFree(team: cz.creeperface.hytale.bedwars.api.arena.Team): Boolean
+        fun isTeamFree(team: Team): Boolean
     }
 }

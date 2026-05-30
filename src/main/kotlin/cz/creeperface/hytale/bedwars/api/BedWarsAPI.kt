@@ -1,30 +1,36 @@
 package cz.creeperface.hytale.bedwars.api
 
 import com.hypixel.hytale.server.core.universe.PlayerRef
+import cz.creeperface.hytale.bedwars.api.arena.Arena
+import cz.creeperface.hytale.bedwars.api.data.provider.DataProvider
+import cz.creeperface.hytale.bedwars.api.data.provider.DataProviderFactory
+import cz.creeperface.hytale.bedwars.api.economy.EconomyProvider
+import cz.creeperface.hytale.bedwars.api.economy.EconomyProviderFactory
+import cz.creeperface.hytale.bedwars.api.extension.ConfigExtensionRegistry
 
 interface BedWarsAPI {
 
-    val economyProvider: cz.creeperface.hytale.bedwars.api.economy.EconomyProvider
+    val economyProvider: EconomyProvider
 
-    val dataProvider: cz.creeperface.hytale.bedwars.api.data.provider.DataProvider
+    val dataProvider: DataProvider
 
     /** Registry for config extension sections and UI extension points. */
-    val configExtensions: cz.creeperface.hytale.bedwars.api.extension.ConfigExtensionRegistry
+    val configExtensions: ConfigExtensionRegistry
 
     /** Get all active arenas. */
-    fun getArenas(): Collection<cz.creeperface.hytale.bedwars.api.arena.Arena>
+    fun getArenas(): Collection<Arena>
 
     /** Get arena by name. */
-    fun getArena(arena: String): cz.creeperface.hytale.bedwars.api.arena.Arena?
+    fun getArena(arena: String): Arena?
 
     /** Get the arena a player is currently in. */
-    fun getPlayerArena(p: PlayerRef): cz.creeperface.hytale.bedwars.api.arena.Arena?
+    fun getPlayerArena(p: PlayerRef): Arena?
 
     /** Join the best available arena. */
     fun joinRandomArena(p: PlayerRef)
 
     /** Find a free arena for the player. */
-    fun getFreeArena(p: PlayerRef): cz.creeperface.hytale.bedwars.api.arena.Arena?
+    fun getFreeArena(p: PlayerRef): Arena?
 
     /**
      * Register an economy provider factory under a name. The name is matched
@@ -33,7 +39,7 @@ interface BedWarsAPI {
      * Must be called before the BedWars plugin resolves its providers — register
      * from your plugin's `setup()` (and ensure your plugin loads before BedWars).
      */
-    fun registerEconomyProvider(name: String, factory: cz.creeperface.hytale.bedwars.api.economy.EconomyProviderFactory)
+    fun registerEconomyProvider(name: String, factory: EconomyProviderFactory)
 
     /**
      * Register a data provider factory under a name. The name is matched against
@@ -42,7 +48,7 @@ interface BedWarsAPI {
      * Must be called before the BedWars plugin resolves its providers — register
      * from your plugin's `setup()` (and ensure your plugin loads before BedWars).
      */
-    fun registerDataProvider(name: String, factory: cz.creeperface.hytale.bedwars.api.data.provider.DataProviderFactory)
+    fun registerDataProvider(name: String, factory: DataProviderFactory)
 
     companion object {
 

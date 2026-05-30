@@ -1,13 +1,16 @@
 package cz.creeperface.hytale.bedwars.api.event
 
+import cz.creeperface.hytale.bedwars.api.arena.Arena
+import cz.creeperface.hytale.bedwars.api.arena.Team
+
 /**
  * Fired when an arena game ends.
  */
 class ArenaStopEvent(
-    arena: cz.creeperface.hytale.bedwars.api.arena.Arena,
-    val winner: cz.creeperface.hytale.bedwars.api.arena.Team?,
+    arena: Arena,
+    val winner: Team?,
     val cause: Cause
-) : cz.creeperface.hytale.bedwars.api.event.ArenaEvent(arena) {
+) : ArenaEvent(arena) {
 
     enum class Cause {
         ELIMINATION,

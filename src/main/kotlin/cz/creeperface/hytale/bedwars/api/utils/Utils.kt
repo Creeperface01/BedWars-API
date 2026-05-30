@@ -4,13 +4,18 @@ package cz.creeperface.hytale.bedwars.api.utils
 
 import com.hypixel.hytale.server.core.entity.entities.Player
 import com.hypixel.hytale.server.core.universe.PlayerRef
+import cz.creeperface.hytale.bedwars.api.arena.Arena
+import cz.creeperface.hytale.bedwars.api.arena.State
+import cz.creeperface.hytale.bedwars.api.arena.Team
+import cz.creeperface.hytale.bedwars.api.placeholder.ArenaScope
+import cz.creeperface.hytale.bedwars.api.placeholder.TeamScope
 import cz.creeperface.hytale.placeholderapi.api.scope.Scope
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-typealias ArenaContext = Scope<cz.creeperface.hytale.bedwars.api.arena.Arena, cz.creeperface.hytale.bedwars.api.placeholder.ArenaScope>.Context
-typealias TeamContext = Scope<cz.creeperface.hytale.bedwars.api.arena.Team, cz.creeperface.hytale.bedwars.api.placeholder.TeamScope>.Context
+typealias ArenaContext = Scope<Arena, ArenaScope>.Context
+typealias TeamContext = Scope<Team, TeamScope>.Context
 
 operator fun <T, E : Enum<E>> Array<T>.get(index: Enum<E>) = this[index.ordinal]
 
@@ -18,7 +23,7 @@ operator fun <T, E : Enum<E>> Array<T>.set(index: Enum<E>, value: T) {
     this[index.ordinal] = value
 }
 
-inline fun <reified T : cz.creeperface.hytale.bedwars.api.arena.Arena, R> cz.creeperface.hytale.bedwars.api.arena.Arena.handle(
+inline fun <reified T : Arena, R> Arena.handle(
     action: T.() -> R
 ): R? {
     contract {
@@ -32,8 +37,8 @@ inline fun <reified T : cz.creeperface.hytale.bedwars.api.arena.Arena, R> cz.cre
     return null
 }
 
-inline fun <reified T : cz.creeperface.hytale.bedwars.api.arena.Arena, R> cz.creeperface.hytale.bedwars.api.arena.Arena.handle(
-    state: cz.creeperface.hytale.bedwars.api.arena.State<T>,
+inline fun <reified T : Arena, R> Arena.handle(
+    state: State<T>,
     action: T.() -> R
 ): R? {
     contract {

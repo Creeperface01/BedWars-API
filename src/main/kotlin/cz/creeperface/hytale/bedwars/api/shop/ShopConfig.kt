@@ -9,18 +9,18 @@ import kotlinx.serialization.json.JsonObject
  */
 @Serializable
 data class ShopConfig(
-    val windows: List<cz.creeperface.hytale.bedwars.api.shop.ShopWindowConfig> = emptyList(),
+    val windows: List<ShopWindowConfig> = emptyList(),
     val extensions: JsonObject = JsonObject(emptyMap())
 )
 
 @Serializable
 data class ShopWindowConfig(
     val name: String = "",
-    val icon: cz.creeperface.hytale.bedwars.api.shop.ShopItemRef = _root_ide_package_.cz.creeperface.hytale.bedwars.api.shop.ShopItemRef(),
+    val icon: ShopItemRef = ShopItemRef(),
     val type: String = "menu",
     val children: List<ShopWindowConfig> = emptyList(),
-    @SerialName("purchase_item") val purchaseItem: cz.creeperface.hytale.bedwars.api.shop.ShopItemRef? = null,
-    val cost: List<cz.creeperface.hytale.bedwars.api.shop.ShopItemRef> = emptyList()
+    @SerialName("purchase_item") val purchaseItem: ShopItemRef? = null,
+    val cost: List<ShopItemRef> = emptyList()
 )
 
 @Serializable
