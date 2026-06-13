@@ -3,6 +3,8 @@
 Public API for the BedWars Hytale plugin. Third-party plugins depend on this module to integrate with BedWars -- reading
 game state, reacting to events, extending configuration, and adding custom UI to the configurator.
 
+**Source & releases:** https://github.com/Creeperface01/BedWars-API
+
 ## Setup
 
 Add the BedWars API JAR as a `compileOnly` dependency:
@@ -44,31 +46,66 @@ api.configExtensions           // Config extension registry
 val arena: Arena = api.getArena("lobby1") ?: return
 
 arena.config                   // ArenaConfiguration (timing, players, shop, etc.)
-arena.players                  // Map<String, PlayerRef>
-arena.state                    // Current state (Voting, TeamSelect, Game)
+arena.players                  // Map<String, PlayerRef> — everyone in the arena
+arena.state                    // Current state: Waiting / Voting / TeamSelect / Game
 arena.context                  // PlaceholderAPI scope context
+arena.closed                   // True when the arena cannot be joined
+arena.inArena(playerRef)       // Whether a player is in this arena
+arena.joinToArena(playerRef)   // Add a player (returns Boolean)
+arena.leaveArena(playerRef)    // Remove a player
+arena.broadcastMessage(msg)    // Message everyone (players + spectators)
+```
+
+The live game is exposed through the `Game` state's `GameHandler` — `null` unless a match is running:
+
+```kotlin
+import cz.creeperface.hytale.bedwars.api.arena.State
+
+val game = (arena.state as? State.Game)?.handler ?: return
+
+game.mapConfig                 // MapConfiguration being played
+game.teams                     // List<Team>
+game.aliveTeams                // Teams still in the running
+game.winner                    // Team? — set once the game ends
+game.ending                    // True while the end screen is showing
+game.getPlayerData(playerRef)  // PlayerData? for a player in the game
+game.getPlayerTeam(playerRef)  // Team? for a player
+game.getTeam(id)               // Team? by id
+game.isSpectator(playerRef)    // Whether the player is spectating
 ```
 
 ### Teams
 
 ```kotlin
-val team: Team = playerData.team ?: return
+val team: Team = game.getPlayerTeam(playerRef) ?: return
 
+team.id                        // Stable team index
 team.config                    // TeamConfiguration (name, color, spawn, bed)
+team.playerCount               // Members currently on the team
 team.hasBed()                  // Whether the bed is intact
 team.isAlive()                 // Whether the team has living players
-team.getTeamPlayers()          // All players on this team
+team.getTeamPlayers()          // Map<String, PlayerData> of members
+team.destroyBed()              // Programmatically break the bed
+team.messagePlayers(message)   // Message everyone on the team
 ```
 
 ### Player Data
 
-```kotlin
-val data: PlayerData = arena.getPlayerData(playerRef) ?: return
+`PlayerData` is per-game — fetch it from the `GameHandler`:
 
-data.team                      // Current team (null if spectator)
-data.stats                     // Session stats (kills, deaths, etc.)
-data.isSpectator               // Whether eliminated
+```kotlin
+import cz.creeperface.hytale.bedwars.api.data.Stat
+
+val data: PlayerData = game.getPlayerData(playerRef) ?: return
+
+data.playerRef                 // The PlayerRef
+data.team                      // Their Team
+data.arena                     // The Arena
+data.getStat(Stat.KILLS)       // Session delta for a stat (this game only)
+data.canRespawn()              // Whether they can still respawn (team has a bed)
 ```
+
+Spectator status lives on the handler: `game.isSpectator(playerRef)`.
 
 ## Events
 
@@ -81,7 +118,7 @@ All events extend `ArenaEvent` and work with Hytale's event bus. Events with `is
 | `ArenaStateChangeEvent`     | State transition (Voting -> TeamSelect -> Game) |
 | `ArenaPlayerJoinEvent`      | Player joins arena                              |
 | `ArenaPlayerLeaveEvent`     | Player leaves arena                             |
-| `ArenaPlayerKillEvent`      | Player kills another player                     |
+| `ArenaKillEvent`            | Participant kills another (player or bot)       |
 | `ArenaPlayerEliminateEvent` | Player eliminated (no bed + died)               |
 | `ArenaPlayerRespawnEvent`   | Player respawns                                 |
 | `ArenaTeamEliminateEvent`   | Entire team eliminated                          |
@@ -92,40 +129,125 @@ All events extend `ArenaEvent` and work with Hytale's event bus. Events with `is
 Example:
 
 ```kotlin
-eventRegistry.registerGlobal(ArenaPlayerKillEvent::class.java) { event ->
+eventRegistry.registerGlobal(ArenaKillEvent::class.java) { event ->
     val killer = event.killer
-    val victim = event.player
+  val victim = event.victim
     // Award bonus currency, announce, etc.
 }
 ```
 
 ## Economy Provider
 
-Implement a custom economy backend:
+Implement a custom economy backend. All operations return `CompletableFuture`, and `currency` defaults to
+`defaultCurrency`. Only the methods below are abstract — `subtractMoney`, the `PlayerRef` overloads, and the
+default-currency variants are derived from them.
 
 ```kotlin
 class MyEconomyProvider : EconomyProvider {
-    override val defaultCurrency: Currency = MyCurrency
-    override fun addMoney(player: UUID, amount: Double, currency: Currency?) { ... }
-    override fun getMoney(player: UUID, currency: Currency?): Double { ... }
-    // ...
+  override val defaultCurrency: EconomyProvider.Currency = MyCurrency
+
+  // Credit a player by UUID
+  override fun addMoney(
+    player: UUID, amount: Double, currency: EconomyProvider.Currency
+  ): CompletableFuture<Void> {
+    ...
+  }
+
+  // Read a balance by username
+  override fun getMoney(
+    player: String, currency: EconomyProvider.Currency
+  ): CompletableFuture<Double> {
+    ...
+  }
+
+  override fun transferMoney(
+    from: String, to: String, amount: Double, currency: EconomyProvider.Currency
+  ): CompletableFuture<Boolean> {
+    ...
+  }
+
+  override fun getCurrency(name: String): EconomyProvider.Currency? {
+    ...
+  }
 }
+```
+
+Register it from your plugin's `setup()` (before BedWars resolves providers), then set `economy_provider` in
+`economy.json` to the name you registered:
+
+```kotlin
+BedWarsAPI.instance.registerEconomyProvider("mybackend") { MyEconomyProvider() }
 ```
 
 ## Data Provider
 
-Implement custom player stats storage:
+Implement custom player-stats storage (and, optionally, arena/map/shop config storage). Every method returns a
+`CompletableFuture` — none are `suspend`:
 
 ```kotlin
 class MyDataProvider : DataProvider {
-    override suspend fun getData(identifier: String): Stats? { ... }
-    override suspend fun saveData(identifier: String, data: Stats) { ... }
-    // Also supports arena, map, and shop config storage
-    override suspend fun loadArenaConfigs(): Map<String, ArenaConfiguration> { ... }
-    override suspend fun loadShopConfigs(): Map<String, ShopConfig> { ... }
-    // ...
+  override fun init() {
+    ...
+  }    // optional — open connections
+  override fun deinit() {
+    ...
+  }  // optional — close connections
+
+  // ---- Player stats (identifier = player UUID string) ----
+  override fun register(name: String, identifier: String): CompletableFuture<Void> {
+    ...
+  }
+  override fun unregister(identifier: String): CompletableFuture<Void> {
+    ...
+  }
+  override fun getData(identifier: String): CompletableFuture<Stats?> {
+    ...
+  }
+  override fun getDataByName(name: String): CompletableFuture<Stats?> {
+    ...
+  }
+  override fun saveData(identifier: String, data: Stats): CompletableFuture<Void> {
+    ...
+  }
+
+  // ---- Config storage (used when config.json `store_configs` = true) ----
+  override fun loadArenaConfigs(): CompletableFuture<Map<String, ArenaConfiguration>> {
+    ...
+  }
+  override fun saveArenaConfig(name: String, config: ArenaConfiguration): CompletableFuture<Void> {
+    ...
+  }
+  override fun deleteArenaConfig(name: String): CompletableFuture<Void> {
+    ...
+  }
+  override fun loadMapConfigs(): CompletableFuture<Map<String, MapConfiguration>> {
+    ...
+  }
+  override fun saveMapConfig(name: String, config: MapConfiguration): CompletableFuture<Void> {
+    ...
+  }
+  override fun deleteMapConfig(name: String): CompletableFuture<Void> {
+    ...
+  }
+  override fun loadShopConfigs(): CompletableFuture<Map<String, ShopConfig>> {
+    ...
+  }
+  override fun saveShopConfig(name: String, config: ShopConfig): CompletableFuture<Void> {
+    ...
+  }
+  override fun deleteShopConfig(name: String): CompletableFuture<Void> {
+    ...
+  }
 }
 ```
+
+Register it from your plugin's `setup()`, then set `data_provider` in `config.json` to the name you registered:
+
+```kotlin
+BedWarsAPI.instance.registerDataProvider("mybackend") { MyDataProvider() }
+```
+
+A `Stats` object exposes `stats[Stat.KILLS]` (running total), `getDelta(stat)` (this session), and `add(stat, value)`.
 
 ## Config Extensions
 
@@ -164,8 +286,8 @@ BedWarsAPI.instance.configExtensions.register(KITS_SECTION)
 ### Reading Extension Data
 
 ```kotlin
-// In game logic -- read from a map config
-val mapConfig: MapConfiguration = arena.selectedMap
+// In game logic -- read from the map config of a running game
+val mapConfig: MapConfiguration = (arena.state as? State.Game)?.handler?.mapConfig ?: return
 val kits: KitsConfig = mapConfig.extensions.getSection(KITS_SECTION)
 
 if (kits.enabled) {
@@ -313,7 +435,7 @@ Player statistics tracked by BedWars:
 | `HITS`   | Hits dealt     |
 | `GAMES`  | Games played   |
 
-Custom stats can be registered via `CustomStat.register(id, displayName)`.
+Custom stats can be registered via `CustomStat.register(CustomStat(id, displayName))`.
 
 ## PlaceholderAPI Integration
 
